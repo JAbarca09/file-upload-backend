@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/my-database", {
+mongoose.connect("mongodb://localhost:27017/file-upload", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
