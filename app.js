@@ -12,10 +12,14 @@ const app = express();
 // const secretKey = generateJWTSecretKey();
 // console.log(secretKey);
 
+const corsOptions = {
+  origin: ["http://localhost:3000", "http://192.168.0.13:3000"],
+}
+
 // Middleware
 app.use(morgan("dev"));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Connect to MongoDB
 mongoose.connect("mongodb://localhost:27017/file-upload", {
