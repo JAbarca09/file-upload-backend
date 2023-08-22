@@ -35,9 +35,7 @@ mongoose.connection.once("open", () => {
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
-const fileRoutes = require("./routes/fileRoutes");
 
 app.use("/api/auth", authRoutes);
-app.use("/api/file", fileRoutes);
 
 module.exports = app;
