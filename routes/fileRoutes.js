@@ -4,7 +4,12 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.post("/upload-file", authMiddleware, fileController.uploadFile);
-router.get("/get-file", fileController.getFile);
+router.post(
+  "/upload",
+  authMiddleware,
+  fileController.upload.single("file"),
+  fileController.uploadFile
+);
+router.get("/get-files", authMiddleware, fileController.getFiles);
 
 module.exports = router;
