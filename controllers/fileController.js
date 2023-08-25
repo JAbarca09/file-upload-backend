@@ -1,48 +1,38 @@
+const multer = require("multer");
 const File = require("../models/file");
 
+// Configure multer for file uploads
+const storage = multer.memoryStorage(); // Store files as Buffer
+exports.upload = multer({ storage });
+
 exports.uploadFile = async (req, res) => {
-  // Get user ID from the authenticated user, if you have user authentication
-  const userId = req.user.userId; // Assuming you have middleware to extract user info from JWT
-
   try {
-    const { filename, description } = req.body;
-    // You can handle file upload logic here
-    // For example, you might use a library like multer to handle file uploads
+    const { filename } = req.body;
+    const file = req.file.buffer; // The uploaded file's buffer
+    const user = req.user;
 
-    // Create a new file object
-    const file = new File({
+    const newFile = new File({
       filename,
-      user: userId,
-      description,
-      // Other file-related fields
+      file,
+      user: user.userId,
     });
 
-    // Save the file to the database
-    await file.save();
-
-    return res.status(201).json({ message: "File uploaded successfully" });
+    await newFile.save();
+    res.status(201).json({ message: "File uploaded successfully" });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal server error" });
+    console.log(err);
+    res.status(500).json({ message: "Error uploading file" });
   }
 };
 
-exports.getFile = async (req, res) => {
-  // Handle getting a specific file by ID
+exports.getFiles = async (req, res) => {
   try {
-    const fileId = req.params.id;
-    const file = await File.findById(fileId);
+    const user = req.user;
 
-    if (!file) {
-      return res.status(404).json({ message: "File not found" });
-    }
-
-    return res.status(200).json({ file });
+    const files = await File.find({ user: user.userId });
+    res.status(200).json(files);
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal server error" });
+    console.log(err);
+    res.status(500).json({ message: "Error retrieving files" });
   }
 };
-
-// Add more functions as needed for other file-related operations
-// For example, you might have functions to update, delete, list files, etc.
