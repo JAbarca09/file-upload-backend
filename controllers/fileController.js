@@ -36,3 +36,24 @@ exports.getFiles = async (req, res) => {
     res.status(500).json({ message: "Error retrieving files" });
   }
 };
+
+exports.removeFile = async (req, res) => {
+  try {
+    const fileId = req.params.fileId;
+    const user = req.user;
+
+    const file = await File.findOne({ _id: fileId, user: user.userId });
+
+    if (!file) {
+      return res
+        .status(404)
+        .json({ message: "File not found or unauthorized" });
+    }
+
+    await File.deleteOne({ _id: fileId });
+    res.status(204).json({ message: "File deleted successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error retrieving files" });
+  }
+};
