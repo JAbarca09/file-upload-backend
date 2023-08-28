@@ -37,6 +37,33 @@ exports.getFiles = async (req, res) => {
   }
 };
 
+exports.downloadFile = async (req, res) => {
+  try {
+    const fileId = req.params.fileId;
+    const user = req.user.userId;
+
+    const file = await File.findOne({ _id: fileId, user: user });
+
+    if (!file) {
+      return res
+        .status(404)
+        .json({ message: "File not found or unauthorized" });
+    }
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=${file.filename}`
+    );
+    res.setHeader("Content-Type", "application/octet-stream");
+
+    // Send the file as a download
+    res.send(file.file);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error downloading file" });
+  }
+};
+
 exports.removeFile = async (req, res) => {
   try {
     const fileId = req.params.fileId;
