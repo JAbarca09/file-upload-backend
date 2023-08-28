@@ -11,6 +11,7 @@ router.post(
   fileController.uploadFile
 );
 router.get("/get-files", authMiddleware, fileController.getFiles);
-router.delete("/remove-file/:fileId",  authMiddleware, fileController.removeFile)
+router.get("/download/:fileId", authMiddleware, fileController.downloadFile);
+router.delete("/remove-file/:fileId", authMiddleware, fileController.removeFile);
 
 module.exports = router;
