@@ -9,6 +9,10 @@ const fileSchema = new mongoose.Schema({
     type: Buffer, 
     required: true,
   },
+  size : {
+    type: Number,
+    required: true,
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference to the User schema
