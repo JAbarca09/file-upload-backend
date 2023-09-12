@@ -9,11 +9,12 @@ exports.uploadFile = async (req, res) => {
   try {
     const { filename } = req.body;
     const file = req.file.buffer; // The uploaded file's buffer
+    const size = req.file.size / 1048576; // file size in MB
     const user = req.user;
-
     const newFile = new File({
       filename,
       file,
+      size,
       user: user.userId,
     });
 
