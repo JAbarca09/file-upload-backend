@@ -26,6 +26,18 @@ exports.uploadFile = async (req, res) => {
   }
 };
 
+exports.getFile = async (req, res) => {
+  try {
+    const fileId = req.params.fileId;
+
+    const file = await File.findOne({ _id: fileId });
+    res.status(200).json(file);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error getting file"});
+  }
+}
+
 exports.getFiles = async (req, res) => {
   try {
     const user = req.user;
